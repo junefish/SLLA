@@ -4,9 +4,14 @@
 	header('content-type: application/json; charset=utf-8');
 
 	$resp = [];
-	$fb_ids = $_GET['fb_ids'];
+	//@junefish - adding set check fixes "undefined index" error
+		//=> fixes undefined variable error
+	$fb_ids = (isset($_GET['fb_ids']) ? $_GET['fb_ids'] : null);
 
-	foreach ($fb_ids as &$fb_id) {
+	//@junefish - adding array check fixes "invalid argument" error
+	if (is_array($fb_ids)) {
+		foreach ($fb_ids as &$fb_id) {
+			
 		// Get cURL resource
 		$curl = curl_init();
 		// Set some options - we are passing in a useragent too here
@@ -18,6 +23,7 @@
 		array_push($resp,curl_exec($curl));
 		// Close request to clear up some resources
 		curl_close($curl);
+	}
 	}
 	unset($fb_id);
 
