@@ -23,15 +23,15 @@ if($_GET['page']){
 		$sql_query = "SELECT * FROM calendar WHERE published = 1 AND startTime > '$today' ORDER BY startTime ASC LIMIT $page_start,$limit";
 		$show_more_query = "SELECT * FROM calendar WHERE published = 1 AND startTime > '$today' ORDER BY startTime ASC LIMIT $show_more_start,1";
 	}
-	$result_set = mysql_query($sql_query);
-	$show_more_result = mysql_query($show_more_query);
-	if(mysql_fetch_row($show_more_result) == 0){
+	$result_set = mysqli_query($mysqli, $sql_query);
+	$show_more_result = mysqli_query($mysqli, $show_more_query);
+	if(mysqli_fetch_row($show_more_result) == 0){
 		$showmore = false;
 	}
 	else{
 		$showmore = true;
 	}
-	while($row = mysql_fetch_row($result_set)){
+	while($row = mysqli_fetch_row($result_set)){
 		array_push($neweventslist,$row[1]);
 	}
 	$result = json_encode(array("neweventslist"=>$neweventslist,"showmore"=>$showmore));
